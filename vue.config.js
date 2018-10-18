@@ -3,13 +3,13 @@ module.exports = {
   filenameHashing: false,
   productionSourceMap: false,
   devServer: {
-    port: 8080,
+    port: 5678,
     proxy: {
       '/api':{
-        target:'https://api.douban.com',
+        target:'http://172.16.212.45:8079',
         changeOrigin:true,
         pathRewrite:{
-          '/api':'/v2/book'
+          '/api':''
         }
       }
     },

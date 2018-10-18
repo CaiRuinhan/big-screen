@@ -24,11 +24,13 @@
         <!-- 左侧两个柱状图 -->
         <div class="left-bar">
           <div class="left-bar1-box">
-            <div id="bar1" style="width: 100%;height:370px;"></div>
+            <!-- <div id="bar1" style="width: 100%;height:370px;"></div> -->
+            <Chart id="bar1" width="100%" height="370px" :option="bar1opt" />
           </div>
           <hr>
           <div class="left-bar2-box">
-            <div id="bar2" style="width: 500px;height:370px;"></div>
+            <!-- <div id="bar2" style="width: 500px;height:370px;"></div> -->
+            <Chart id="bar2" width="500px" height="370px" :option="bar2opt" />
             <div class="left-bar2-list">
               <ul>
                 <li><i class="circle"></i><span>一分站</span>：-----<span>100</span></li>
@@ -43,7 +45,7 @@
       </div>
       <!-- 地图 -->
       <div class="t-mid">
-        <div id="YCmap" style="width: 1500px;height:1370px;"></div>
+        <div id="YCmap" style="width: 100%;height:500px;background:rgba(255,0,0,0.3)"></div>
       </div>
       <!-- 右侧表格及柱状图 -->
       <div class="t-right">
@@ -130,7 +132,8 @@
         </div>
 
         <div class="t-right-bar">
-          <div id="bar3" style="width: 100%;height:100%;"></div>
+          <!-- <div id="bar3" style="width: 100%;height:100%;"></div> -->
+          <Chart id="bar3" width="100%" height="100%" :option="bar3opt" />
         </div>
       </div>
     </div>
@@ -148,227 +151,284 @@
 <script>
 import Axios from 'axios'
 import E from 'echarts'
+import Chart from './components/bar'
 
 export default {
   name: 'app',
+  data() {
+    return {
+      //  当月分站平均出车时间
+      bar1opt: {
+        title: {
+          text: '>>当月分站平均出车时间<<',
+          textStyle: {
+            color: '#59acff',
+            fontSize: 20
+          },
+          left: 'center' //  标题居中
+        },
+        tooltip: {
+          show: true
+        },
+        xAxis: {
+          data: [],
+          axisLabel: {
+            textStyle: {
+              color: '#59acff',
+              fontSize: 20
+            },
+            interval: 0 //  强制显示所有刻度标签
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#59acff' //  轴线颜色
+            }
+          },
+          axisTick: {
+            alignWithLabel: true, //  刻度对齐柱状图
+            inside: true //  刻度向内
+          }
+        },
+        yAxis: {
+          name: '时间：分钟',
+          nameTextStyle: {
+            fontSize: 20
+          },
+          axisLabel: {
+            textStyle: {
+              color: '#59acff',
+              fontSize: 20
+            }
+          },
+          splitLine: {
+            show: false //  隐藏轴向分隔线
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#59acff'
+            }
+          },
+          axisTick: {
+            inside: true
+          }
+        },
+        series: [
+          {
+            name: '时间',
+            type: 'bar',
+            barWidth: 30,
+            data: [],
+            itemStyle: {
+              normal: {
+                color: new E.graphic.LinearGradient(0, 0, 0, 1, [
+                  //  柱状图渐变
+                  { offset: 0, color: '#e10019' },
+                  { offset: 1, color: '#3399ff' }
+                ])
+              }
+            }
+          }
+        ]
+      },
+      //  当日分站出车量
+      bar2opt: {
+        title: {
+          text: '>>当日分站出车量<<',
+          textStyle: {
+            color: '#59acff',
+            fontSize: 20
+          },
+          left: 'center' //  标题居中
+        },
+        tooltip: {
+          show: true
+        },
+        xAxis: {
+          data: [],
+          axisLabel: {
+            textStyle: {
+              color: '#59acff',
+              fontSize: 20
+            },
+            interval: 0
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#59acff' //  轴线颜色
+            }
+          },
+          axisTick: {
+            alignWithLabel: true, //  刻度对齐柱状图
+            inside: true //  刻度向内
+          }
+        },
+        yAxis: {
+          nameTextStyle: {
+            fontSize: 20
+          },
+          axisLabel: {
+            textStyle: {
+              color: '#59acff',
+              fontSize: 20
+            }
+          },
+          splitLine: {
+            show: false //  隐藏轴向分隔线
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#59acff'
+            }
+          },
+          axisTick: {
+            inside: true
+          }
+        },
+        series: [
+          {
+            name: '出车量',
+            type: 'bar',
+            barWidth: 30,
+            data: [],
+            itemStyle: {
+              normal: {
+                color: new E.graphic.LinearGradient(0, 0, 0, 1, [
+                  //  柱状图渐变
+                  { offset: 0, color: '#e10019' },
+                  { offset: 1, color: '#3399ff' }
+                ])
+              }
+            }
+          }
+        ]
+      },
+      //  当月调度员平均受理时间
+      bar3opt: {
+        title: {
+          text: '>>当月调度员平均受理时间<<',
+          textStyle: {
+            color: '#59acff',
+            fontSize: 20
+          },
+          left: 'center' //  标题居中
+        },
+        tooltip: {
+          show: true
+        },
+        xAxis: {
+          data: [],
+          axisLabel: {
+            textStyle: {
+              color: '#59acff',
+              fontSize: 20
+            },
+            interval: 0
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#59acff' //  轴线颜色
+            }
+          },
+          axisTick: {
+            alignWithLabel: true, //  刻度对齐柱状图
+            inside: true //  刻度向内
+          }
+        },
+        yAxis: {
+          name: '时间：秒',
+          nameTextStyle: {
+            fontSize: 20
+          },
+          axisLabel: {
+            textStyle: {
+              color: '#59acff',
+              fontSize: 20
+            }
+          },
+          splitLine: {
+            show: false //  隐藏轴向分隔线
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#59acff'
+            }
+          },
+          axisTick: {
+            inside: true
+          }
+        },
+        series: [
+          {
+            name: '时间',
+            type: 'bar',
+            barWidth: 30,
+            data: [],
+            itemStyle: {
+              normal: {
+                color: new E.graphic.LinearGradient(0, 0, 0, 1, [
+                  //  柱状图渐变
+                  { offset: 0, color: '#e10019' },
+                  { offset: 1, color: '#3399ff' }
+                ])
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  computed: {},
   mounted() {
-    Axios.get('/api/search?q=javascript&count=1').then(res => {
-      console.log(res)
+    //  登录
+    this.$A
+      .post('/api/login', {
+        userName: '李河谕坐席',
+        password: '123456'
+      })
+      .then(res => {
+        if (res.data.success !== true) {
+          alert('登录失败')
+        }
+      })
+
+    //  当月分站平均出车时间
+    this.$A.get('/api/screen/avgCaroutTimeMonth').then(res => {
+      if (res.data.success === true) {
+        let arr = res.data.data
+        this.bar1opt.xAxis.data = arr.map(item => {
+          return item.org_name.substring(0, 2)
+        })
+        this.bar1opt.series[0].data = arr.map(item => {
+          return parseInt(item.avg_carout_time / 60)
+        })
+      }
     })
-    //  柱状图1
-    let bar1 = E.init(document.getElementById('bar1'))
-    let bar1opt = {
-      title: {
-        text: '>>当月分站平均出车时间<<',
-        textStyle: {
-          color: '#59acff',
-          fontSize: 20
-        },
-        left: 'center' //  标题居中
-      },
-      xAxis: {
-        data: ['衬衫A', '衬衫B', '衬衫C', '衬衫D', '衬衫E', '衬衫F'],
-        axisLabel: {
-          textStyle: {
-            color: '#59acff',
-            fontSize: 20
-          }
-        },
-        axisLine: {
-          lineStyle: {
-            color: '#59acff' //  轴线颜色
-          }
-        },
-        axisTick: {
-          alignWithLabel: true, //  刻度对齐柱状图
-          inside: true //  刻度向内
-        }
-      },
-      yAxis: {
-        name: '时间：分钟',
-        nameTextStyle: {
-          fontSize: 20
-        },
-        axisLabel: {
-          textStyle: {
-            color: '#59acff',
-            fontSize: 20
-          }
-        },
-        splitLine: {
-          show: false //  隐藏轴向分隔线
-        },
-        axisLine: {
-          lineStyle: {
-            color: '#59acff'
-          }
-        },
-        axisTick: {
-          inside: true
-        }
-      },
-      series: [
-        {
-          name: '销量',
-          type: 'bar',
-          barWidth: 30,
-          data: [5, 20, 36, 10, 10, 55],
-          itemStyle: {
-            normal: {
-              color: new E.graphic.LinearGradient(0, 0, 0, 1, [
-                //  柱状图渐变
-                { offset: 0, color: '#e10019' },
-                { offset: 1, color: '#3399ff' }
-              ])
-            }
-          }
-        }
-      ]
-    }
-    bar1.setOption(bar1opt)
 
-    //  柱状图2
-    let bar2 = E.init(document.getElementById('bar2'))
-    let bar2opt = {
-      title: {
-        text: '>>当日分站出车量<<',
-        textStyle: {
-          color: '#59acff',
-          fontSize: 20
-        },
-        left: 'center' //  标题居中
-      },
-      xAxis: {
-        data: ['', '', '', '', '', ''],
-        axisLabel: {
-          textStyle: {
-            color: '#59acff',
-            fontSize: 20
-          }
-        },
-        axisLine: {
-          lineStyle: {
-            color: '#59acff' //  轴线颜色
-          }
-        },
-        axisTick: {
-          alignWithLabel: true, //  刻度对齐柱状图
-          inside: true //  刻度向内
-        }
-      },
-      yAxis: {
-        nameTextStyle: {
-          fontSize: 20
-        },
-        axisLabel: {
-          textStyle: {
-            color: '#59acff',
-            fontSize: 20
-          }
-        },
-        splitLine: {
-          show: false //  隐藏轴向分隔线
-        },
-        axisLine: {
-          lineStyle: {
-            color: '#59acff'
-          }
-        },
-        axisTick: {
-          inside: true
-        }
-      },
-      series: [
-        {
-          name: '销量',
-          type: 'bar',
-          barWidth: 30,
-          data: [5, 20, 36, 10, 10, 55],
-          itemStyle: {
-            normal: {
-              color: new E.graphic.LinearGradient(0, 0, 0, 1, [
-                //  柱状图渐变
-                { offset: 0, color: '#e10019' },
-                { offset: 1, color: '#3399ff' }
-              ])
-            }
-          }
-        }
-      ]
-    }
-    bar2.setOption(bar2opt)
+    //  当日分站出车量
+    this.$A.get('/api/screen/quantitySendCarDay').then(res => {
+      if (res.data.success === true) {
+        let arr = res.data.data
+        this.bar2opt.xAxis.data = arr.map(item => {
+          return item.org_name.substring(0, 2)
+        })
+        this.bar2opt.series[0].data = arr.map(item => {
+          return item.amount
+        })
+      }
+    })
 
-    //  柱状图3
-    let bar3 = E.init(document.getElementById('bar3'))
-    let bar3opt = {
-      title: {
-        text: '>>当月调度员平均受理时间<<',
-        textStyle: {
-          color: '#59acff',
-          fontSize: 20
-        },
-        left: 'center' //  标题居中
-      },
-      xAxis: {
-        data: ['衬衫A', '衬衫B', '衬衫C', '衬衫D', '衬衫E', '衬衫F'],
-        axisLabel: {
-          textStyle: {
-            color: '#59acff',
-            fontSize: 20
-          }
-        },
-        axisLine: {
-          lineStyle: {
-            color: '#59acff' //  轴线颜色
-          }
-        },
-        axisTick: {
-          alignWithLabel: true, //  刻度对齐柱状图
-          inside: true //  刻度向内
-        }
-      },
-      yAxis: {
-        name: '时间：分钟',
-        nameTextStyle: {
-          fontSize: 20
-        },
-        axisLabel: {
-          textStyle: {
-            color: '#59acff',
-            fontSize: 20
-          }
-        },
-        splitLine: {
-          show: false //  隐藏轴向分隔线
-        },
-        axisLine: {
-          lineStyle: {
-            color: '#59acff'
-          }
-        },
-        axisTick: {
-          inside: true
-        }
-      },
-      series: [
-        {
-          name: '销量',
-          type: 'bar',
-          barWidth: 30,
-          data: [5, 20, 36, 10, 10, 55],
-          itemStyle: {
-            normal: {
-              color: new E.graphic.LinearGradient(0, 0, 0, 1, [
-                //  柱状图渐变
-                { offset: 0, color: '#e10019' },
-                { offset: 1, color: '#3399ff' }
-              ])
-            }
-          }
-        }
-      ]
-    }
-    bar3.setOption(bar3opt)
+    //  当月调度员平均受理时间
+    this.$A.get('/api/screen/avgAcceptTimeMonth').then(res => {
+      if (res.data.success === true) {
+        let arr = res.data.data
+        this.bar3opt.xAxis.data = arr.map(item => {
+          return item.staff_name.slice(-2)
+        })
+        this.bar3opt.series[0].data = arr.map(item => {
+          return parseInt(item.avg_accept_time)
+        })
+      }
+    })
 
     //  折线图
     let line = E.init(document.getElementById('line'))
@@ -1313,62 +1373,181 @@ export default {
     E.registerMap('YC', geoJSON)
     let mapopt = {
       title: {
-        text: '香港18区人口密度 （2011）'
+        text: '>>今日事件各区分布<<',
+        left: 'center',
+        top: 'bottom',
+        textStyle: {
+          color: '#59acff'
+        }
+      },
+      geo: {
+        //  series 中的 scatter 与这里相呼应，不是 series 中的 type=map
+        map: 'YC',
+        zoom: 1,
+        roam: false, //  拖拽+滚轮缩放
+        aspectScale: 1,
+        label: {
+          //  标签相关样式
+          show: true,
+          color: 'red'
+        },
+        emphasis: {
+          //  鼠标悬停时标签相关样式
+          show: true
+        },
+        itemStyle: {
+          //  区域样式
+          normal: {
+            areaColor: 'transparent',
+            borderColor: '#59acff'
+          },
+          emphasis: {
+            areaColor: 'green'
+          }
+        }
       },
       series: [
+        // {
+        //   name: '香港18区人口密度',
+        //   type: 'map',
+        //   mapType: 'YC', // 自定义扩展图表类型
+        //   //roam:true,
+        //   itemStyle: {
+        //     //  常规状态
+        //     normal: {
+        //       areaColor: 'transparent',
+        //       borderColor: '#59acff',
+        //       //  标签相关
+        //       label: {
+        //         show: true, //  地图上显示名字
+        //         backgroundColor: 'red'
+        //       }
+        //     },
+        //     //  高亮状态
+        //     emphasis: {
+        //       areaColor: 'red',
+        //       label: {
+        //         show: true //  地图上鼠标悬停时的名字
+        //       }
+        //     }
+        //   }
+        // data:[
+        //     {name: '中西区', value: 20057.34},
+        //     {name: '湾仔', value: 15477.48},
+        //     {name: '东区', value: 31686.1},
+        //     {name: '南区', value: 6992.6},
+        //     {name: '油尖旺', value: 44045.49},
+        //     {name: '深水埗', value: 40689.64},
+        //     {name: '九龙城', value: 37659.78},
+        //     {name: '黄大仙', value: 45180.97},
+        //     {name: '观塘', value: 55204.26},
+        //     {name: '葵青', value: 21900.9},
+        //     {name: '荃湾', value: 4918.26},
+        //     {name: '屯门', value: 5881.84},
+        //     {name: '元朗', value: 4178.01},
+        //     {name: '北区', value: 2227.92},
+        //     {name: '大埔', value: 2180.98},
+        //     {name: '沙田', value: 9172.94},
+        //     {name: '西贡', value: 3368},
+        //     {name: '离岛', value: 806.98}
+        // ],
+        // // 自定义名称映射
+        // nameMap: {
+        //     'Central and Western': '中西区',
+        //     'Eastern': '东区',
+        //     'Islands': '离岛',
+        //     'Kowloon City': '九龙城',
+        //     'Kwai Tsing': '葵青',
+        //     'Kwun Tong': '观塘',
+        //     'North': '北区',
+        //     'Sai Kung': '西贡',
+        //     'Sha Tin': '沙田',
+        //     'Sham Shui Po': '深水埗',
+        //     'Southern': '南区',
+        //     'Tai Po': '大埔',
+        //     'Tsuen Wan': '荃湾',
+        //     'Tuen Mun': '屯门',
+        //     'Wan Chai': '湾仔',
+        //     'Wong Tai Sin': '黄大仙',
+        //     'Yau Tsim Mong': '油尖旺',
+        //     'Yuen Long': '元朗'
+        // }
+        // },
         {
-          name: '香港18区人口密度',
-          type: 'map',
-          mapType: 'YC', // 自定义扩展图表类型
+          //  这种点可以标在 option.geo 生成的地图上，而不是 option.series 下的 type = map 上
+          name: 'pm2.5',
+          type: 'scatter',
+          coordinateSystem: 'geo',
+          data: [
+            {
+              name: 'series.data.name',
+              value: [115.638084, 28.119157, 100]
+            }
+          ],
+          symbolSize: function(val) {
+            return val[2] / 10
+          },
+          label: {
+            normal: {
+              formatter: '{b}',
+              position: 'right',
+              show: false
+            },
+            emphasis: {
+              show: true
+            }
+          },
           itemStyle: {
-            normal: { label: { show: true } },
-            emphasis: { label: { show: true } }
+            normal: {
+              color: '#ddb926'
+            }
           }
-          // data:[
-          //     {name: '中西区', value: 20057.34},
-          //     {name: '湾仔', value: 15477.48},
-          //     {name: '东区', value: 31686.1},
-          //     {name: '南区', value: 6992.6},
-          //     {name: '油尖旺', value: 44045.49},
-          //     {name: '深水埗', value: 40689.64},
-          //     {name: '九龙城', value: 37659.78},
-          //     {name: '黄大仙', value: 45180.97},
-          //     {name: '观塘', value: 55204.26},
-          //     {name: '葵青', value: 21900.9},
-          //     {name: '荃湾', value: 4918.26},
-          //     {name: '屯门', value: 5881.84},
-          //     {name: '元朗', value: 4178.01},
-          //     {name: '北区', value: 2227.92},
-          //     {name: '大埔', value: 2180.98},
-          //     {name: '沙田', value: 9172.94},
-          //     {name: '西贡', value: 3368},
-          //     {name: '离岛', value: 806.98}
-          // ],
-          // // 自定义名称映射
-          // nameMap: {
-          //     'Central and Western': '中西区',
-          //     'Eastern': '东区',
-          //     'Islands': '离岛',
-          //     'Kowloon City': '九龙城',
-          //     'Kwai Tsing': '葵青',
-          //     'Kwun Tong': '观塘',
-          //     'North': '北区',
-          //     'Sai Kung': '西贡',
-          //     'Sha Tin': '沙田',
-          //     'Sham Shui Po': '深水埗',
-          //     'Southern': '南区',
-          //     'Tai Po': '大埔',
-          //     'Tsuen Wan': '荃湾',
-          //     'Tuen Mun': '屯门',
-          //     'Wan Chai': '湾仔',
-          //     'Wong Tai Sin': '黄大仙',
-          //     'Yau Tsim Mong': '油尖旺',
-          //     'Yuen Long': '元朗'
-          // }
+        },
+        {
+          name: 'Top 5',
+          type: 'effectScatter',
+          coordinateSystem: 'geo',
+          data: [
+            {
+              name: 'series.data.name',
+              value: [115.569858, 28.73115, 200]
+            },
+            {
+              name: 'series.data.name',
+              value: [114.569858, 28.13115, 200]
+            }
+          ],
+          symbolSize: function(val) {
+            return val[2] / 10
+          },
+          showEffectOn: 'render',
+          rippleEffect: {
+            brushType: 'stroke'
+          },
+          hoverAnimation: true,
+          label: {
+            normal: {
+              formatter: '{b}',
+              position: 'right',
+              show: true
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#f4e925',
+              shadowBlur: 10,
+              shadowColor: '#333'
+            }
+          },
+          zlevel: 1
         }
       ]
     }
     ycmap.setOption(mapopt)
+  },
+  methods: {},
+  components: {
+    Chart
   }
 }
 </script>
@@ -1380,7 +1559,7 @@ body {
   padding: 0;
   width: 2560px;
   height: 1440px;
-  background: url('./assets/bg.png') no-repeat;
+  background: url('./assets/images/bg.png') no-repeat;
 }
 
 hr {

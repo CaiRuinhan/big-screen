@@ -1,17 +1,18 @@
 <template>
-    <div :id="id" :style="style"></div>
+  <div :id="id" :style="style"></div>
 </template>
 <script>
 export default {
   name: 'Chart',
   data() {
     return {
-      //echarts实例
+      //  echarts实例
       chart: ''
     }
   },
   props: {
-    //父组件需要传递的参数：id，width，height，option
+    //  父组件需要传递的参数：id，width，height，option
+    //  当使用 geoJSON 生成地图时，需要传递 geoJSON 和用于 registerMap 的地图名
     id: {
       type: String
     },
@@ -23,10 +24,16 @@ export default {
       type: String,
       default: '300px'
     },
-    option: {
+    geojson: {
       type: Object,
-      //Object类型的prop值一定要用函数return出来，不然会报错。原理和data是一样的，
-      //使用闭包保证一个vue实例拥有自己的一份props
+      default: null
+    },
+    registerMap: {
+      type: String,
+      default: ''
+    },
+    option: {
+      type: Object,      
       default() {
         return {
           title: {
@@ -55,7 +62,7 @@ export default {
     }
   },
   watch: {
-    //观察option的变化
+    //  深度监听
     option: {
       handler(newVal, oldVal) {
         if (this.chart) {
@@ -68,7 +75,7 @@ export default {
           this.init()
         }
       },
-      deep: true //对象内部属性的监听
+      deep: true
     }
   },
   computed: {
@@ -85,6 +92,9 @@ export default {
   methods: {
     init() {
       this.chart = this.$E.init(document.getElementById(this.id))
+      if (this.geojson != null) {
+        this.$E.registerMap(this.registerMap, this.geojson)
+      }
       this.chart.setOption(this.option)
     }
   }
